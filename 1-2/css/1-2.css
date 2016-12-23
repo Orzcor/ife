@@ -16,9 +16,16 @@ body{background:#dedede;}
 .m-art{margin:20px 20px;padding:20px 20px;background:#fff;font-size:16px;line-height:16px;box-shadow:1px 1px 2px 1px #848484;}
 .m-art h2{padding:10px 0;font-size:24px;font-weight:bold;}
 .m-art h3{padding:10px 0;font-size:16px;color:#777;font-weight:bold;}
-.m-art .tips{color:#777;font-size:12px;}
-
-
-
+.m-art .auther, .m-art .time{color:#777;font-size:12px;line-height:30px;}
+.m-art p{text-indent:2em;line-height:24px;}
+.m-art figure{margin:10px 0;width:150px;height:150px;border:1px solid #e8ecef;text-align:center;}
+.m-art figcaption{line-height:30px;}
+.m-art figure img{max-width:110px;max-height:110px;}
+.m-art .rank li{list-style:decimal inside;line-height:24px;}
+	/* 表格 */
+.m-art .tab{width:100%;border:1px solid #e6e6e6;border-collapse: collapse;}
+.m-art .tab td, .m-art .tab th{padding:5px;border:1px solid #e6e6e6;}
+.m-art .tab th{background:#333;color:#fff;font-weight:bold;}
+.m-art .tab .bottom{background:#ccc;}
 
 /* 元件 u-. */
