@@ -13,7 +13,8 @@ body{background:#dedede;}
 
 
 /* 文章模块 m-art */
-.m-art{margin:20px 20px;padding:20px 20px;background:#fff;font-size:16px;line-height:16px;box-shadow:1px 1px 2px 1px #848484;}
+.m-art, .m-sd{margin:20px 20px;padding:20px 20px;background:#fff;line-height:16px;box-shadow:1px 1px 2px 1px #848484;}
+.m-art{font-size:16px;}
 .m-art h2{padding:10px 0;font-size:24px;font-weight:bold;}
 .m-art h3{padding:10px 0;font-size:16px;color:#777;font-weight:bold;}
 .m-art .auther, .m-art .time{color:#777;font-size:12px;line-height:30px;}
@@ -27,5 +28,16 @@ body{background:#dedede;}
 .m-art .tab td, .m-art .tab th{padding:5px;border:1px solid #e6e6e6;}
 .m-art .tab th{background:#333;color:#fff;font-weight:bold;}
 .m-art .tab .bottom{background:#ccc;}
+
+/* 侧栏模块 m-sd */
+.m-sd{}
+.m-sd h2{padding:10px 10px;font-size:16px;font-weight:bold;border-left:3px solid #DCDCDC;}
+.m-sd div{margin:10px 0;}
+.m-sd label{display:block;float:left;width:35%;text-align:right;}
+.m-sd .tips{margin-left:35%;font-size:12px;color:#aaa;}
+.m-sd .msg{width:45%;height:100px;}
+.m-sd input[type="checkbox"], .m-sd input[type="radio"]{vertical-align:middle;}
+.m-sd .submit{margin:0 auto;width:100%;font-size:24px;color:#fff;background:#128fdc;border:none;border-radius:10px;}
+
 
 /* 元件 u-. */

@@ -119,41 +119,55 @@
 				</tbody>
 			</table>
 		</article>
-		<aside>
+		<aside class="m-sd">
 			<h2>这里是一个侧栏，这是侧栏的标题</h2>
 			<form action="##">
-				<label for="email">请输入邮箱地址：</label>
-				<input type="text" id="email" />
-				<p>邮箱地址请按要求格式输入</p>
+				<div>
+					<label for="email">请输入邮箱地址：</label>
+					<input type="text" id="email" />
+					<p class="tips">邮箱地址请按要求格式输入</p>
+				</div>
 			
-				<label for="psw">请输入密码：</label>
-				<input type="password" id="psw" />
-				<label for="re-psw">请重复输入密码：</label>
-				<input type="password" id="re-psw" />
-				<p>密码请为6-16位英文数字</p>
+				<div>
+					<label for="pwd">请输入密码：</label>
+					<input type="password" id="pwd" />
+				</div>
+				<div>
+					<label for="re-pwd">请重复输入密码：</label>
+					<input type="password" id="re-pwd" />
+					<p class="tips">密码请为6-16位英文数字</p>
+				</div>
 			
-				<label>性别：</label>
-				<input type="radio" checked="check" name="sex" value="male" />男
-				<input type="radio" name="sex" value="female" />女
+				<div>
+					<label>性别：</label>
+					<input type="radio" checked="check" name="sex" value="male" />男
+					<input type="radio" name="sex" value="female" />女
+				</div>
 			
-				<label>城市：</label>
-				<select name="">
-					<option value="北京">北京</option>
-					<option value="上海">上海</option>
-					<option value="西安">西安</option>
-				</select>
+				<div>
+					<label>城市：</label>
+					<select name="">
+						<option value="北京">北京</option>
+						<option value="上海">上海</option>
+						<option value="西安">西安</option>
+					</select>
+				</div>
 			
-				<label>爱好：</label>
-				<input type="checkbox" name="checkbox1" value="" />运动
-				<input type="checkbox" name="checkbox2" value="" />艺术
-				<input type="checkbox" name="checkbox3" value="" />科学
+				<div>
+					<label>爱好：</label>
+					<input type="checkbox" name="checkbox1" value="" />运动
+					<input type="checkbox" name="checkbox2" value="" />艺术
+					<input type="checkbox" name="checkbox3" value="" />科学
+				</div>
 			
-				<label>个人描述：</label>
-				<textarea name="MSG" id="" cols="30" rows="2">
-					这是一个多行输入框，输入你的个人描述
-				</textarea>
+				<div>
+					<label>个人描述：</label>
+					<textarea class="msg">
+						这是一个多行输入框，输入你的个人描述
+					</textarea>
+				</div>
 			
-				<input type="submit" value="确认提交" />
+				<input class="submit" type="submit" value="确认提交" />
 			</form>
 		</aside>
 	</main>
