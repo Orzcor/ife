@@ -39,4 +39,30 @@
     width: 80px;
     float: left; }
 
+.m-inquiry {
+  font-size: 12px;
+  padding: 14px 28px;
+  background: #fff;
+  border: 1px solid #dddee0; }
+  .m-inquiry > div {
+    float: left;
+    margin-right: 22px; }
+  .m-inquiry label {
+    margin-right: 16px;
+    color: #aaa; }
+  .m-inquiry .dealer {
+    width: 118px; }
+  .m-inquiry select {
+    margin-right: 14px;
+    padding: 6px 10px; }
+  .m-inquiry input {
+    margin-right: 14px;
+    padding: 4px 13px; }
+  .m-inquiry .date {
+    width: 116px; }
+  .m-inquiry .people {
+    width: 66px; }
+  .m-inquiry .sub_btn {
+    margin-top: 24px; }
+
 /*# sourceMappingURL=1-9.css.map */

@@ -58,3 +58,46 @@
 		float:left;
 	}
 }
+
+.m-inquiry{
+	font-size:12px;
+	padding:14px 28px;
+	background:#fff;
+	border:1px solid #dddee0;
+
+	>div{
+		float:left;
+		margin-right:22px;
+	}
+
+	label{
+		margin-right:16px;
+		color:#aaa;
+	}
+
+	.dealer{
+		width:118px;
+	}
+
+	select{
+		margin-right:14px;
+		padding:6px 10px;
+	}
+	input{
+		margin-right:14px;
+		padding:4px 13px;
+	}
+
+	.date{
+		width:116px;
+	}
+
+	.people{
+		width:66px;
+	}
+
+	.sub_btn{
+		margin-top:24px;
+	}
+
+}
