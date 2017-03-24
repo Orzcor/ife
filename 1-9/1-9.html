@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<!-- saved from url=(0042)http://v3.bootcss.com/examples/dashboard/# -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="http://v3.bootcss.com/favicon.ico">
+
+    <title>Dashboard Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="stylesheets/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="stylesheets/dashboard.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="stylesheets/function.css">
+    <link rel="stylesheet" href="stylesheets/1-9.css">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="./Dashboard Template for Bootstrap_files/ie-emulation-modes-warning.js.下载"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+.en-markup-crop-options {
+    top: 18px !important;
+    left: 50% !important;
+    margin-left: -100px !important;
+    width: 200px !important;
+    border: 2px rgba(255,255,255,.38) solid !important;
+    border-radius: 4px !important;
+}
+
+.en-markup-crop-options div div:first-of-type {
+    margin-left: 0px !important;
+}
+</style></head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="##"><img src="images/logo.jpg" alt=""></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <a class="c-login" href="#"><span class="glyphicon glyphicon-user"></span> 登录</a>
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="sidebar">
+          <div class="m-account">
+          	<div class="profile">
+          	  <img src="images/cor.jpg" alt="">
+          	</div>
+          	<p class="name">ABC123</p>
+          	<div class="popularity f-cb">
+	          <div class="collect">
+	          	<span>110</span>
+	          	<br>
+	          	<span>收藏</span>
+	          </div>
+	          <div class="audience">
+	          	<span>313</span>
+	          	<br>
+	          	<span>粉丝</span>
+	          </div>
+	        </div>
+          </div>
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="##"><span class="glyphicon glyphicon-folder-open"></span>个人报表</a></li>
+            <li><a href="##"><span class="glyphicon glyphicon-star"></span>个人收藏</a></li>
+            <li><a href="##"><span class="glyphicon glyphicon-share"></span>我的分享</a></li>
+            <li><a href="##/"><span class="glyphicon glyphicon-star"></span>图库</a></li>
+            <li><a href="##/"><span class="glyphicon glyphicon-star"></span>成长记录</a></li>
+            <li><a href="##/"><span class="glyphicon glyphicon-book"></span>账户信息</a></li>
+          </ul>
+        </div>
+        <ol class="breadcrumb">
+		  <li><a href="#">C站</a></li>
+		  <li><a href="#">个人报表</a></li>
+		  <li><a href="#">文件一</a></li>
+		  <li class="active">文档一</li>
+		</ol>
+        <div class="main">
+          <!-- 搜索模块 -->
+          <form class="m-inquiry f-cb">
+          	<div>
+          		<label>查询项</label>
+          		<select>
+          			<option>第一项</option>
+          			<option>第二项</option>
+          		</select>
+          	</div>
+          	<div>
+          		<p>
+	          		<label>买方</label>
+	          		<select class="dealer">
+	          			<option>小A</option>
+	          			<option>小B</option>
+	          		</select>
+	          	</p>
+	          	<p>
+	          		<label>卖方</label>
+	          		<select class="dealer">
+	          			<option>小C</option>
+	          			<option>小D</option>
+	          		</select>
+	          	</p>
+          	</div>
+          	<div>
+          		<p>
+	          		<label for="date">日期</label>
+	          		<input class="date" id="date" type="text" value="2016-04-01" />
+	          		<label>总耗时</label>
+	          		<select class="day">
+	          			<option>6天</option>
+	          			<option>8天</option>
+	          		</select>
+	          	</p>
+          		<p>
+	          		<label>人数</label>
+	          		<select class="people">
+	          			<option>8人</option>
+	          			<option>10项</option>
+	          		</select>
+	          		<label>成交项</label>
+	          		<select class="items">
+	          			<option>8项</option>
+	          			<option>10项</option>
+	          		</select>
+	          	</p>
+          	</div>
+          	<input class="btn btn-primary sub_btn" type="submit" value="搜索" />
+          </form>
+          <!-- 历史查询模块 -->
+          <div class="m-history">
+          	<div class="btnL"></div>
+          	<ul class="sum">
+          		<li>
+          			<p>10:00 <span>am</span></p>
+          			<p><span>￥</span>1200</p>
+          		</li>
+          		<li>
+          			<p>11:00 <span>am</span></p>
+          			<p><span>￥</span>1300</p>
+          		</li>
+          		<li>
+          			<p>12:00 <span>am</span></p>
+          			<p><span>￥</span>1200</p>
+          		</li>
+          		<li>
+          			<p>01:00 <span>am</span></p>
+          			<p><span>￥</span>1400</p>
+          		</li>
+          		<li>
+          			<p>02:00 <span>am</span></p>
+          			<p><span>￥</span>1500</p>
+          		</li>
+          		<li>
+          			<p>03:00 <span>am</span></p>
+          			<p><span>￥</span>1800</p>
+          		</li>
+          	</ul>
+          	<div class="btnR"></div>
+          	<div class="select_btn"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./Dashboard Template for Bootstrap_files/jquery.min.js.下载"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="./Dashboard Template for Bootstrap_files/bootstrap.min.js.下载"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="./Dashboard Template for Bootstrap_files/holder.min.js.下载"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="./Dashboard Template for Bootstrap_files/ie10-viewport-bug-workaround.js.下载"></script>
+  
+
+</body></html>
