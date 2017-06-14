@@ -58,6 +58,7 @@ function addEvent (ele, type, handler) {
 
 			container.innerHTML = strInner;
 			buttonList[0].value = "";
+			buttonList[0].focus();
 
 			addDivDelEvent();
 		},
