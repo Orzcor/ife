@@ -14,7 +14,7 @@ function addEvent(ele, event, hanlder){
 	if(ele.addEventListener){
 		ele.addEventListener(event, hanlder, false);
 	}else if(ele.attachEvent){
-		ele.attachEvent("on" + event, ele);
+		ele.attachEvent("on" + event, hanlder);
 	}else{
 		ele["on" + event] = hanlder;
 	}
