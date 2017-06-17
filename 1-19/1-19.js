@@ -63,7 +63,7 @@ function addEvent (ele, type, handler) {
 		paint : function(){
 			var strInner = "";
 			this.str.forEach(function(item, index){
-				strInner += "<div>" + parseInt(item) + "</div>";
+				strInner += "<div style='height:" + item * 2 + "px'>" + parseInt(item) + "</div>";
 			});
 
 			container.innerHTML = strInner;
@@ -88,7 +88,6 @@ function addEvent (ele, type, handler) {
 			}(cur));
 		}
 	}
-	addDivDelEvent();
 
 	addEvent(buttonList[1], "click", function(){
 		var input = buttonList[0].value;
