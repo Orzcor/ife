@@ -80,6 +80,28 @@ function addEvent (ele, type, handler) {
 		}
 	}
 
+	function bubbleSort() {
+		var Clock;
+		var count = 0, i = 0;
+		var len = queue.str.length;
+		Clock = setInterval(function(){
+			if(count >= len - 1){
+				clearInterval(Clock);
+			}
+			if(i == len - 1 - count){
+				i = 0;
+				count++;
+			}
+			if(queue.str[i] > queue.str[i + 1]){
+				var temp = queue.str[i];
+				queue.str[i] = queue.str[i + 1];
+				queue.str[i + 1] = temp;
+				queue.paint();
+			}
+			i++;
+		}, 100);
+	}
+
 
 	function addDivDelEvent () {
 		for(var cur = 0; cur < container.children.length; cur++){
@@ -93,6 +115,8 @@ function addEvent (ele, type, handler) {
 		var input = buttonList[0].value;
 		if((/^[0-9]+$/).test(input)){
 			if(input < 10 || input > 100){
+				buttonList[0].value = "";
+				buttonList[0].focus();
 				console.log("The interger you input must between 10 and 100!");
 			}
 			else {
@@ -107,6 +131,8 @@ function addEvent (ele, type, handler) {
 		var input = buttonList[0].value;
 		if((/^[0-9]+$/).test(input)){
 			if(input < 10 || input > 100){
+				buttonList[0].value = "";
+				buttonList[0].focus();
 				console.log("The interger you input must between 10 and 100!");
 			}
 			else {
@@ -120,3 +146,5 @@ function addEvent (ele, type, handler) {
 	addEvent(buttonList[3], "click", queue.leftPop.bind(queue));
 
 	addEvent(buttonList[4], "click", queue.rightPop.bind(queue));
+
+	addEvent(buttonList[5], "click", bubbleSort);
