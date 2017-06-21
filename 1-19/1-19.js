@@ -101,7 +101,7 @@ function addEvent (ele, type, handler) {
 			i++;
 		}, 100);
 	}
-
+	
 
 	function addDivDelEvent () {
 		for(var cur = 0; cur < container.children.length; cur++){
