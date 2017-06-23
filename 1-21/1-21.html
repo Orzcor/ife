@@ -5,54 +5,47 @@
         <title>1-21</title>
     
         <style>
-            #container{
+            #tagBox, #hobbyBox{
                 display:flex;
                 margin-top:20px;
                 width:800px;
                 align-items:flex-end;
             }
 
-            #container div {
+            #tagBox div, #hobbyBox div {
                 display: inline-block;
                 padding:5px;
                 font-size: 14px;
                 text-align: center;
                 margin: 2px 0;
                 margin-right: 7px;
-                background-color: red;
+                background-color: blue;
                 color: #FFFFFF;
             }
 
-            #inputBox{
-                float:left;
-                margin-right:15px;
+            #hobbyBox div{
+                background: orange;
             }
 
-            input{
-                margin-bottom:15px;
-            }
-
-            .z-sch{
-                background:blue;
+            #tagBox .z-sch{
+                background:red;
             }
         </style>
     </head>
     
     <body>
-        <textarea id="inputBox" type="text" cols="40" rows="5">i love jason</textarea>
-        <input type="button" value="左侧入">
-        <input type="button" value="右侧入" style="margin-right: 25px">
-        <input type="button" value="左侧出">
-        <input type="button" value="右侧出">
-
-        <br />
-        <input type="text" placeholder="输入查询内容">
-        <input type="button" value="查询">
-        
-        <div id="container">
-
-
+        <div>
+            Tag: <input type="text" id="tagInput" />
         </div>
+        <div id="tagBox"></div>
+        <br />
+        
+        <textarea id="hobbyInput" type="text" cols="40" rows="5">i love jason</textarea>
+        <br />
+        <input type="button" value="确认兴趣爱好">
+        <br />
+        
+        <div id="hobbyBox"></div>
 
         <script src="1-21.js"></script>
     </body>
