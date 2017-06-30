@@ -7,7 +7,8 @@
  * };
  */
 var aqiData = {};
-var rander = false;
+var stor = localStorage;
+var rander = true;
 
 function addEvent(elem, type, handler){
 	if(!elem){
@@ -40,7 +41,7 @@ function addAqiData() {
         return;
     }
 
-    aqiData[city] = air;
+    stor.setItem(city, air);
     rander = true;
 }
 
@@ -57,13 +58,13 @@ function renderAqiList() {
 	var oTable = document.getElementById("aqi-table");
 	oTable.innerHTML = "<tr><td>城市</td><td>空气质量</td><td>操作</td></tr>";
 
-	for(city in aqiData){
+	for(city in stor){
 		var tr = document.createElement("tr");
 		var td1 = document.createElement("td");
 		td1.innerHTML = city;
 		tr.appendChild(td1);
 		var td2 = document.createElement("td");
-		td2.innerHTML = aqiData[city];
+		td2.innerHTML = stor.getItem(city);
 		tr.appendChild(td2);
 		var td3 = document.createElement("td");
 		td3.innerHTML = "<button class='del-btn'>删除</botton>"
@@ -89,7 +90,7 @@ function delBtnHandle(target) {
   // do sth.
   var tr = target.parentElement.parentElement;
   var city = tr.children[0].innerHTML;
-  delete aqiData[city];
+  stor.removeItem(city);
   rander = true;
   renderAqiList();
 }
@@ -107,7 +108,9 @@ function init() {
   	if(e.target && e.target.nodeName === "BUTTON"){
   		delBtnHandle(e.target);
   	}
-  })
+  });
+
+  renderAqiList();
 }
 
 init();
