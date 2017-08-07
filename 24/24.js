@@ -11,6 +11,10 @@
 
     function boxClick(e){
         select.style.background = 'white'
+        if(e.target === select){
+            select = box.parentElement
+            return
+        }
         select = e.target
         select.style.background = 'red'
     }
