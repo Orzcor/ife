@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>24</title>
+    <style>
+        #box{
+            border: 1px solid black;
+        }
+        div{
+            margin-left: 10px;
+            color: black;
+            padding-left: 15px;
+        }
+
+        div.on{
+            overflow: hidden;
+            height: auto;
+        }
+
+        div.off{
+            overflow: hidden;
+            height: 20px;
+        }
+
+        div.off div:nth-child(n)::before{
+            visibility: hidden;
+        }
+
+        div.on::before{
+            position: absolute;
+            z-index: 2;
+            margin-left: -30px;
+            content: '[-]';
+        }
+        div.off::before{
+            position: absolute;
+            z-index: 2;
+            margin-left: -30px;
+            content: '[+]';
+        }
+    </style>
+</head>
+<body>
+    <span>
+        <div id="box">
+            <!-- <div class="off">Super
+                <div>Car
+                    <div>Apple
+                        <div>Pear</div>
+                        <div>Pig</div>
+                        <div>Colo</div>
+                        <div>Soccer</div>
+                    </div>
+                    <div>
+                        Phone
+                    </div>
+                    <div>Jason
+                        <div>Book</div>
+                        <div>School</div>
+                    </div>
+                </div>
+                <div>Note
+                    <div>Human
+                        <div>Code</div>
+                        <div>Operate</div>
+                        <div>Man</div>
+                    </div>
+                    <div>Progrom
+                        <div>Bement
+                            <div>cat</div>
+                        </div>
+                        <div>Glass</div>
+                    </div>
+                </div>
+                <div>Fish</div>
+            </div> -->
+        </div>
+    </span>
+
+
+    <p>
+        <input type="text" id="schBox">
+        <input type="button" value="深度查询" id="schDFBtn">
+        <input type="button" value="广度查询" id="schBFBtn">
+    </p>
+    <p>
+        <input type="text" id="addStr"> <input type="button" value="添加节点" id="addNode">
+        <input type="button" value="删除节点" id="removeNode">
+    </p>
+    <script src="25.js"></script>
+</body>
+</html>
