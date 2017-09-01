@@ -4,12 +4,12 @@ const htmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
     entry: {
+        init: ['./src/js/init.js'],
         index: ['./src/js/index.js', './src/index.html']
     },
     output: {
         filename: 'js/[name].js',
-        path: path.resolve(__dirname, './dist/'),
-        publicPath: '/dist'
+        path: path.resolve(__dirname, './dist/')
     },
     module: {
         loaders: [{
@@ -21,7 +21,7 @@ module.exports = {
                 presets: ['es2015']
             }
         }, {
-                test: /\.html$/,
+            test: /\.html$/,
             loader: 'html-loader'
         }, {
             test: /\.css$/,
@@ -76,7 +76,7 @@ module.exports = {
                 removeComments: true,
                 // collapseWhitespace: true
             },
-            chunks: ['main', 'index']
+            chunks: ['index']
         }),
         new webpack.HotModuleReplacementPlugin()
     ],
