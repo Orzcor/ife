@@ -5,7 +5,6 @@ body {
 
 
 #screen, #canvasBg {
-    height: 800px;
     left: 0;
 }
 
@@ -28,7 +27,7 @@ body {
     background: white;
 }
 
-.newBtn {
+#createBtn {
     padding: 5px;
     margin: 10px;
     border-radius: 10%;
@@ -36,7 +35,7 @@ body {
 
 #startBtn,
 #stopBtn,
-#removeBtn {
+#destroyBtn {
     padding: 5px;
     margin: 5px;
     background: white;
