@@ -75,7 +75,7 @@
              */
             const charge = function(){
                 let timer = setInterval(function(){
-                    if(self.current == 'fly' || self.current == 'destroy'){
+                    if(self.currState == 'fly' || self.currState == 'destroy'){
                         clearInterval(timer)
                         return
                     }
@@ -128,9 +128,6 @@
                     self.currState = 'stop'
                     self.dynamicManager().stop()
                     self.powerManager().charge()
-                },
-                destroy: function(){
-
                 }
             }
 
@@ -179,8 +176,37 @@
             }
         },
 
-        remove: function(id){
-            spaceships.splice(id, 1)
+        create: function(){
+            let num = [],
+                id
+            if(this.spaceships.length >= 4){
+                console.log('飞船数量最多为4')
+                return
+            }
+            for(let i = 0; i < this.spaceships.length; i++){
+                num.push(this.spaceships[i].id)
+            }
+            for(let i = 0; i < 4; i++){
+                if(num.indexOf(i) === -1){
+                    id = i
+                    break
+                }
+            }
+            new Spaceship(id)
+        },
+
+        destroy: function(id){
+            let num = [],
+                index
+            for(let i = 0; i < this.spaceships.length; i++){
+                num.push(this.spaceships[i].id)
+            }
+            index = num.indexOf(id)
+            if(index === -1){
+                return
+            }
+            let ship = this.spaceships.splice(index, 1)
+            delete ship
         }
     }
 
@@ -189,16 +215,21 @@
      */
     const commander = (function () {
         function create(){
-            let ship = new Spaceship(0)
+            mediator.create()
         }
 
         function send(msg){
             mediator.trigger(msg)
         }
 
+        function destroy(id){
+            mediator.destroy(id)
+        }
+
         return {
             create: create,
-            send: send
+            send: send,
+            destroy: destroy
         }
     })()
 
@@ -357,8 +388,17 @@
             shipId = document.getElementById('shipId')
 
         createBtn.addEventListener('click', commander.create)
+
         startBtn.addEventListener('click', function(){
             commander.send.call(this, {'id': shipId.selectedIndex, 'cmd': 'fly'})
+        })
+
+        stopBtn.addEventListener('click', function(){
+            commander.send.call(this, {'id': shipId.selectedIndex, 'cmd': 'stop'})
+        })
+
+        destroyBtn.addEventListener('click', function(){
+            commander.destroy.call(this, shipId.selectedIndex)
         })
     })()
 
