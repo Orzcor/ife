@@ -38,7 +38,7 @@
             this.deg = 0,           //飞船初始位置
             this.timer = null
 
-            mediator.listen('fly', this.signalManager().receive)
+            mediator.listen(this)
         }
 
         /**
@@ -150,7 +150,6 @@
             let self = this
             return {
                 receive: function(msg){
-                    console.log(msg.id)
                     if(self.id == msg.id && self.currState != msg.cmd){
                         self.stateManager().changesState(msg.cmd)
                     }
@@ -158,6 +157,50 @@
             }
         }
     }
+
+
+    /**
+     * @description mediator广播介质
+     */
+    const mediator = {
+        spaceships: [],
+        /**
+         * @description 订阅消息
+         * @param {String} key - 缓存列表
+         * @callback fn 订阅函数
+         */
+        listen: function(ship){
+            this.spaceships.push(ship)
+        },
+
+        trigger: function(msg){
+            for(let i = 0, l = this.spaceships.length; i < l; i++){
+                this.spaceships[i].signalManager().receive(msg)
+            }
+        },
+
+        remove: function(id){
+            spaceships.splice(id, 1)
+        }
+    }
+
+    /**
+     * @description 指挥官
+     */
+    const commander = (function () {
+        function create(){
+            let ship = new Spaceship(0)
+        }
+
+        function send(msg){
+            mediator.trigger(msg)
+        }
+
+        return {
+            create: create,
+            send: send
+        }
+    })()
 
     /**
      * @description 动画工具
@@ -174,7 +217,6 @@
         let cacheCtx = cacheCanvas.getContext('2d') //生成缓存画布
 
         let timer = null
-        let mediator = null
 
         /**
          * @description 画行星
@@ -260,13 +302,6 @@
             };
         };
 
-        // let ship1 = new Spaceship(0)
-        // drawSpaceship(cacheCtx, ship1)
-        // ship1.stateManager().changesState('fly')
-        
-        // let stopBtn = document.getElementById('stopBtn')
-        // stopBtn.addEventListener('click', ship1.dynamicManager().stop.bind(ship1))
-
         /**
          * [onDraw 绘制屏幕画布]
          * @param  {[type]} spaceships [飞船队列]
@@ -293,8 +328,7 @@
          */
         var animLoop = function() {
             requestAnimationFrame(animLoop);
-            // drawSpaceship(cacheCtx, ship1)
-            onDraw(commander.getSpaceships());
+            onDraw(mediator.spaceships);
         };
 
 
@@ -310,86 +344,6 @@
             setMediator: setMediator,
             animLoop: animLoop
         };
-    })()
-
-    /**
-     * @description mediator广播介质
-     */
-    const mediator = {
-        clientList: [],
-        /**
-         * @description 订阅消息
-         * @param {String} key - 缓存列表
-         * @callback fn 订阅函数
-         */
-        listen: function(key, fn){
-            if(!this.clientList[key]){
-                this.clientList[key] = []
-            }
-            this.clientList[key].push(fn)
-        },
-
-        trigger: function(){
-            let key = Array.prototype.shift.call(arguments),
-                fns = this.clientList[key]
-
-            if(!fns || fns.length === 0){
-                return false
-            }
-
-            for(let i = 0, fn; fn = fns[i++];){
-                fn.apply(this, arguments)
-            }
-        },
-
-        remove: function(key, fn){
-            let fns = this.clientList[key]
-            
-            if(!fns){
-                return false
-            }
-            if(!fn){
-                fns.length = 0
-            }else{
-                for(let i = 0, l = fns.length; i < l; i++){
-                    let _fn = fns[l]
-                    if(_fn === fn){
-                        fns.splice(i, 1)
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * @description 指挥官
-     */
-    const commander = (function () {
-        const spaceships = []   //船队
-
-        function create(){
-            let ship = new Spaceship(spaceships.length)
-            spaceships.push(ship)
-        }
-
-        function send(msg){
-            let state = msg.cmd
-            switch (state){
-                case 'fly':
-                    mediator.trigger('fly', msg)
-                    break
-            }
-        }
-
-        function getSpaceships(){
-            return spaceships
-        }
-
-        return {
-            create: create,
-            send: send,
-            getSpaceships: getSpaceships
-        }
     })()
 
     /**
