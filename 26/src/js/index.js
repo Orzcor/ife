@@ -38,7 +38,7 @@
             this.deg = 0,           //飞船初始位置
             this.timer = null
 
-            mediator.listen(this)
+            mediator.listen(this)   //向mediator注册新飞船
         }
 
         /**
@@ -112,6 +112,23 @@
                 discharge: discharge
             }
         }
+        
+        /**
+         * @description 自爆装置
+         * @param {Number} id
+         */
+        destroy (){
+            let num = [],
+                index
+            for(let i = 0; i < mediator.spaceships.length; i++){
+                num.push(mediator.spaceships[i].id)
+            }
+            index = num.indexOf(this.id)
+            if(index === -1){
+                return
+            }
+            let ship = mediator.spaceships.splice(index, 1)
+        }
 
         /**
          * @description 状态系统
@@ -128,6 +145,10 @@
                     self.currState = 'stop'
                     self.dynamicManager().stop()
                     self.powerManager().charge()
+                },
+                destroy: function(){
+                    self.currState = 'destroy'
+                    self.destroy()
                 }
             }
 
@@ -171,9 +192,17 @@
         },
 
         trigger: function(msg){
-            for(let i = 0, l = this.spaceships.length; i < l; i++){
-                this.spaceships[i].signalManager().receive(msg)
-            }
+            let success = Math.random() > FAILURE_RATE ? true : false
+
+            setTimeout(function() {
+                if(success){
+                    for(let i = 0; i < this.spaceships.length; i++){
+                        this.spaceships[i].signalManager().receive(msg)
+                    }
+                }else{
+                    console.log('请求失败')
+                }
+            }.bind(this), 1000)
         },
 
         create: function(){
@@ -193,21 +222,8 @@
                 }
             }
             new Spaceship(id)
-        },
-
-        destroy: function(id){
-            let num = [],
-                index
-            for(let i = 0; i < this.spaceships.length; i++){
-                num.push(this.spaceships[i].id)
-            }
-            index = num.indexOf(id)
-            if(index === -1){
-                return
-            }
-            let ship = this.spaceships.splice(index, 1)
-            delete ship
         }
+
     }
 
     /**
@@ -222,14 +238,9 @@
             mediator.trigger(msg)
         }
 
-        function destroy(id){
-            mediator.destroy(id)
-        }
-
         return {
             create: create,
-            send: send,
-            destroy: destroy
+            send: send
         }
     })()
 
@@ -398,7 +409,7 @@
         })
 
         destroyBtn.addEventListener('click', function(){
-            commander.destroy.call(this, shipId.selectedIndex)
+            commander.send.call(this, {'id': shipId.selectedIndex, 'cmd': 'destroy'})
         })
     })()
 
