@@ -18,7 +18,7 @@
 
         PLANET_RADIUS = 60,     //行星半径
         ORBIT_COUNT = 4,        //轨道数量
-        FAILURE_RATE = 0.3      //消息发送失败率
+        FAILURE_RATE = 0.1      //消息发送失败率
 
 
     /**
