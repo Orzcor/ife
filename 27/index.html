@@ -21,14 +21,14 @@
     <div id="order">
         <div>
             <p>
-                动力系统选择：<input type="radio" name="dynamic" checked> 前进号（速率30px/s，能耗5%/s）
-                <input type="radio" name="dynamic"> 奔腾号（速率50px/s，能耗7%/s）
-                <input type="radio" name="dynamic"> 超越号速率80px/s，能耗9%/s
+                动力系统选择：<input type="radio" name="dynamic" value="slow" checked> 前进号（速率30px/s，能耗5%/s）
+                <input type="radio" name="dynamic" value="medium"> 奔腾号（速率50px/s，能耗7%/s）
+                <input type="radio" name="dynamic" value="fast"> 超越号（速率80px/s，能耗9%/s）
             </p>
             <p>
-                能源系统选择：<input type="radio" name="power" checked> 劲量型（补充能源速度2%/s）
-                <input type="radio" name="power" id=""> 光能型（补充能源速度3%/s）
-                <input type="radio" name="power" id=""> 永久性（补充能源速度4%/s）
+                能源系统选择：<input type="radio" name="power" value="slow" checked> 劲量型（补充能源速度2%/s）
+                <input type="radio" name="power" value="medium"> 光能型（补充能源速度3%/s）
+                <input type="radio" name="power" value="fast"> 永久性（补充能源速度4%/s）
             </p>
             <button id="createBtn">新的飞船起飞</button>
         </div>

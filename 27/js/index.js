@@ -2,13 +2,25 @@
     let SPACESHIP_SPEED = 2,    //飞船飞行速度
         SPACESHIP_SIZE = 40,    //飞船大小
         SPACESHIP_COUNT = 4,    //飞船数量
-        DEFAULT_CHARGE_RATE = 0.2,      //飞船充电时间
-        DEFAULT_DISCHARGE_RATE = 0.5,   //飞船放电时间
+        DEFAULT_CHARGE_RATE = 0.2,      //飞船充电速率
+        DEFAULT_DISCHARGE_RATE = 0.5,   //飞船放电速率
 
         SCREEN_WIDTH = 600,     //canvas宽度
         SCREEN_HEIGHT = 500,    //canvas高度
         SCREEN_CENTER_X = SCREEN_WIDTH / 2,     //屏幕X轴中心坐标
         SCREEN_CENTER_Y = SCREEN_HEIGHT / 2,    //屏幕Y轴中心坐标
+
+        SPACESHIP_SPEED_SLOW = 0.5,     //慢速飞行
+        SPACESHIP_SPEED_MEDIUM = 2,     //中速飞行
+        SPACESHIP_SPEED_FAST = 5,       //快速飞行
+
+        CHARGE_RATE_SLOW = 0.1,         //慢速充电
+        CHARGE_RATE_MEDIUM = 0.4,       //中速充电
+        CHARGE_RATE_FAST = 1,           //快速充电
+
+        DISCHARGE_RATE_SLOW = 0.2,      //慢速放电
+        DISCHARGE_RATE_MEDIUM = 0.4,    //中速放电
+        DISCHARGE_RATE_FAST = 0.7,      //快速放电
 
         POWERBAR_POS_OFFSET = 5,    //电量条位置位移
         POWERBAR_COLOR_GOOD = '#70ed3f',    //电量良好的状态颜色
@@ -17,7 +29,7 @@
         POWERBAR_WIDTH = 5,         //电量条宽度
 
         PLANET_RADIUS = 60,     //行星半径
-        ORBIT_COUNT = 4,        //轨道数量
+        ORBIT_COUNT = 4,        //轨道数量  
         FAILURE_RATE = 0.1      //消息发送失败率
 
 
@@ -29,11 +41,13 @@
          * @constructor
          * @param {Number} id 
          */
-        constructor (id) {
+        constructor (id, spd, charge, discharge) {
             this.id = id,
             this.power = 100,       //飞船初始电量
-            this.currState = stop,  //飞船初始状态
-            this.mediator = null,   //飞船注册的mediator
+            this.spd = spd,
+            this.charge = charge,
+            this.discharge = discharge
+            this.currState = 'stop',  //飞船初始状态
             this.orbit = 100 + 50 * id - SPACESHIP_SIZE / 2,     //飞船所在轨道的半径
             this.deg = 0,           //飞船初始位置
             this.timer = null
@@ -51,7 +65,7 @@
                     if(self.deg >= 360){
                         self.deg = 0
                     }
-                    self.deg += SPACESHIP_SPEED
+                    self.deg += self.spd
                 }, 20)
             }
 
@@ -84,7 +98,7 @@
                         self.power = 100
                         return
                     }
-                    self.power += DEFAULT_CHARGE_RATE
+                    self.power += self.charge
                 }, 20)
             }
 
@@ -103,7 +117,7 @@
                         self.power = 0
                         return
                     }
-                    self.power -= DEFAULT_DISCHARGE_RATE
+                    self.power -= self.discharge
                 }, 20)
             }
 
@@ -168,10 +182,36 @@
             let self = this
             return {
                 receive: function(msg){
-                    if(self.id == msg.id && self.currState != msg.cmd){
-                        self.stateManager().changesState(msg.cmd)
+                    let order = self.adapter(msg)
+                    if(self.id == order.id && self.currState != order.cmd){
+                        self.stateManager().changesState(order.cmd)
                     }
                 }
+            }
+        }
+
+        /**
+         * @description 指令解码
+         */
+        adapter (msg) {
+            let id = parseInt(msg.substring(0, 4), 2),
+                cmd
+
+            switch(msg.substring(4, 8)){
+                case '0001':
+                    cmd = 'fly'
+                    break
+                case '0010':
+                    cmd = 'stop'
+                    break
+                case '0011':
+                    cmd = 'destroy'
+                    break
+            }
+            
+            return {
+                id: id,
+                cmd: cmd
             }
         }
     }
@@ -192,22 +232,27 @@
         },
 
         trigger: function(msg){
-            let success = Math.random() > FAILURE_RATE ? true : false
-
-            setTimeout(function() {
+            let order = this.adapter(msg)
+            let timer = setInterval(function() {
+                let success = Math.random() > FAILURE_RATE ? true : false
                 if(success){
+                    clearTimeout(timer)
                     for(let i = 0; i < this.spaceships.length; i++){
-                        this.spaceships[i].signalManager().receive(msg)
+                        this.spaceships[i].signalManager().receive(order)
                     }
                 }else{
                     console.log('请求失败')
                 }
-            }.bind(this), 1000)
+            }.bind(this), 300)
         },
 
-        create: function(){
+        create: function(conf){
             let num = [],
-                id
+                id = 0,
+                spd,
+                charge,
+                discharge
+
             if(this.spaceships.length >= 4){
                 console.log('飞船数量最多为4')
                 return
@@ -221,17 +266,69 @@
                     break
                 }
             }
-            new Spaceship(id)
-        }
 
+            switch(conf.dynamic){
+                case 'slow':
+                    spd = SPACESHIP_SPEED_SLOW
+                    discharge = DISCHARGE_RATE_SLOW
+                    break
+                case 'medium':
+                    spd = SPACESHIP_SPEED_MEDIUM
+                    discharge = DISCHARGE_RATE_MEDIUM
+                    break
+                case 'fast':
+                    spd = SPACESHIP_SPEED_FAST
+                    discharge = DISCHARGE_RATE_FAST
+                    break
+            }
+
+            switch(conf.power){
+                case 'slow':
+                    charge = CHARGE_RATE_SLOW
+                    break
+                case 'medium':
+                    charge = CHARGE_RATE_MEDIUM
+                    break
+                case 'fast':
+                    charge = CHARGE_RATE_FAST
+                    break
+            }
+            
+            new Spaceship(id, spd, charge, discharge)
+        },
+
+        /**
+         * @description 指令加密
+         */
+        adapter: function(msg){
+            let id = msg.id.toString(2),
+                cmd
+            for(let i = 4, l = id.length; i > l; i--){
+                id = '0' + id
+            }
+
+            switch(msg.cmd){
+                case 'fly':
+                    cmd = '0001'
+                    break
+                case 'stop':
+                    cmd = '0010'
+                    break
+                case 'destroy':
+                    cmd = '0011'
+                    break
+            }
+
+            return id + cmd
+        }
     }
 
     /**
      * @description 指挥官
      */
     const commander = (function () {
-        function create(){
-            mediator.create()
+        function create(conf){
+            mediator.create(conf)
         }
 
         function send(msg){
@@ -396,9 +493,24 @@
             startBtn = document.getElementById('startBtn'),
             stopBtn = document.getElementById('stopBtn'),
             destroyBtn = document.getElementById('destroyBtn'),
-            shipId = document.getElementById('shipId')
+            shipId = document.getElementById('shipId'),
 
-        createBtn.addEventListener('click', commander.create)
+            dynamicBtn = document.getElementsByName('dynamic'),
+            dynamic = '',
+            powerBtn = document.getElementsByName('power'),
+            power = ''
+
+        createBtn.addEventListener('click', function(){
+            for(let i = 0; i < 3; i++){
+                if(dynamicBtn[i].checked){
+                    dynamic = dynamicBtn[i].value
+                }
+                if(powerBtn[i].checked){
+                    power = powerBtn[i].value
+                }
+            }
+            commander.create({'dynamic': dynamic, 'power': power})
+        })
 
         startBtn.addEventListener('click', function(){
             commander.send.call(this, {'id': shipId.selectedIndex, 'cmd': 'fly'})
