@@ -223,7 +223,7 @@
             }
             
             /**
-             * @description 编码
+             * @description 加密
              */
             function encoded(){
                 let id = self.id.toString(2),
@@ -263,7 +263,9 @@
          * @description 信号发射器
          */
         ejector () {
+            let timer = setInterval(function(){
 
+            }, 500)
         }
     }
 
@@ -283,7 +285,7 @@
         },
 
         trigger: function(msg){
-            let order = this.adapter(msg)
+            let order = adapter.encoded(msg)
             let timer = setInterval(function() {
                 let success = Math.random() > FAILURE_RATE ? true : false
                 if(success){
@@ -346,12 +348,19 @@
             }
             
             new Spaceship(id, spd, charge, discharge)
-        },
+        }
+    }
 
+
+    /**
+     * @description 加密/解密指令的Adapter系统
+     */
+    const adapter = (function(){
         /**
-         * @description 指令加密
+         * @description 加密
+         * @param {Object} msg 
          */
-        adapter: function(msg){
+        const encoded = (msg) => {
             let id = msg.id.toString(2),
                 cmd
             for(let i = 4, l = id.length; i > l; i--){
@@ -372,7 +381,39 @@
 
             return id + cmd
         }
-    }
+        
+        /**
+         * @description 解密
+         */
+        const decoding = (msg) => {
+            let id = parseInt(msg.substring(0, 4), 2),
+                state = msg.substring(4, 8),
+                power = parseInt(msg.substring(8, 16), 2)
+
+            switch(state){
+                case '0001':
+                    state = 'fly'
+                    break
+                case '0010':
+                    state = 'stop'
+                    break
+                case '1100':
+                    state = 'destroy'
+                    break
+            }
+            
+            return {
+                id: id,
+                state: state,
+                power: power
+            }
+        }
+        
+        return {
+            encoded: encoded,
+            decoding: decoding
+        }
+    })()
 
     /**
      * @description 指挥官
