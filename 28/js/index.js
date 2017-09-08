@@ -182,7 +182,7 @@
             let self = this
             return {
                 receive: function(msg){
-                    let order = self.adapter(msg)
+                    let order = self.adapterManager().decoding(msg)
                     if(self.id == order.id && self.currState != order.cmd){
                         self.stateManager().changesState(order.cmd)
                     }
@@ -191,28 +191,79 @@
         }
 
         /**
-         * @description 指令解码
+         * @description 指令系统
          */
-        adapter (msg) {
-            let id = parseInt(msg.substring(0, 4), 2),
-                cmd
-
-            switch(msg.substring(4, 8)){
-                case '0001':
-                    cmd = 'fly'
-                    break
-                case '0010':
-                    cmd = 'stop'
-                    break
-                case '0011':
-                    cmd = 'destroy'
-                    break
+        adapterManager () {
+            let self = this
+            /**
+             * @description 解码
+             * @param {String} msg 
+             * @returns 
+             */
+            function decoding(msg){
+                let id = parseInt(msg.substring(0, 4), 2),
+                    cmd
+    
+                switch(msg.substring(4, 8)){
+                    case '0001':
+                        cmd = 'fly'
+                        break
+                    case '0010':
+                        cmd = 'stop'
+                        break
+                    case '0011':
+                        cmd = 'destroy'
+                        break
+                }
+                
+                return {
+                    id: id,
+                    cmd: cmd
+                }
             }
             
-            return {
-                id: id,
-                cmd: cmd
+            /**
+             * @description 编码
+             */
+            function encoded(){
+                let id = self.id.toString(2),
+                    state = self.currState,
+                    power = self.power.toString(2)
+
+                for(let i = 4, l = id.length; i > l; i--){
+                    id = '0' + id
+                }
+
+                switch(state){
+                    case 'fly':
+                        state = '0001'
+                        break
+                    case 'stop':
+                        state = '0010'
+                        break
+                    case 'destroy':
+                        state = '1100'
+                        break
+                }
+
+                for(let i = 8, l = power.length; i > l; i--){
+                    power = '0' + power
+                }
+
+                return id + state + power
             }
+
+            return {
+                decoding: decoding,
+                encoded: encoded
+            }
+        }
+
+        /**
+         * @description 信号发射器
+         */
+        ejector () {
+
         }
     }
 
