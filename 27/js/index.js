@@ -204,7 +204,7 @@
                 case '0010':
                     cmd = 'stop'
                     break
-                case '0011':
+                case '1100':
                     cmd = 'destroy'
                     break
             }
@@ -315,7 +315,7 @@
                     cmd = '0010'
                     break
                 case 'destroy':
-                    cmd = '0011'
+                    cmd = '1100'
                     break
             }
 
