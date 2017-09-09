@@ -1,4 +1,4 @@
-(function IIFE(){
+;(function IIFE(){
     let SPACESHIP_SPEED = 2,    //飞船飞行速度
         SPACESHIP_SIZE = 40,    //飞船大小
         SPACESHIP_COUNT = 4,    //飞船数量
@@ -29,19 +29,24 @@
         POWERBAR_WIDTH = 5,         //电量条宽度
 
         PLANET_RADIUS = 60,     //行星半径
-        ORBIT_COUNT = 4,        //轨道数量  
+        ORBIT_COUNT = 4,        //轨道数量
         FAILURE_RATE = 0.1      //消息发送失败率
 
 
     /**
-     * @description 造船厂
+     * @description 行星上的造船厂
      */
     class Spaceship {
         /**
-         * @constructor
-         * @param {Number} id 
+         * Creates an instance of Spaceship.
+         * @param {any} id - 飞船序列号
+         * @param {any} spd - 飞行速度
+         * @param {any} charge - 飞行能耗
+         * @param {any} discharge - 飞船充电速率
+         * 
+         * @memberOf Spaceship
          */
-        constructor (id, spd, charge, discharge) {
+        constructor(id, spd, charge, discharge){
             this.id = id,
             this.power = 100,       //飞船初始电量
             this.spd = spd,
@@ -50,9 +55,11 @@
             this.currState = 'stop',  //飞船初始状态
             this.orbit = 100 + 50 * id - SPACESHIP_SIZE / 2,     //飞船所在轨道的半径
             this.deg = 0,           //飞船初始位置
+            this.adapter = new Adapter()
             this.timer = null
 
-            mediator.listen(this)   //向mediator注册新飞船
+            BUS.register(this)
+            this.signalManager().ejector()
         }
 
         /**
@@ -128,24 +135,7 @@
         }
         
         /**
-         * @description 自爆装置
-         * @param {Number} id
-         */
-        destroy (){
-            let num = [],
-                index
-            for(let i = 0; i < mediator.spaceships.length; i++){
-                num.push(mediator.spaceships[i].id)
-            }
-            index = num.indexOf(this.id)
-            if(index === -1){
-                return
-            }
-            let ship = mediator.spaceships.splice(index, 1)
-        }
-
-        /**
-         * @description 状态系统
+         * @description 状态系统，控制飞船状态进行运作
          */
         stateManager () {
             let self = this
@@ -162,6 +152,7 @@
                 },
                 destroy: function(){
                     self.currState = 'destroy'
+                    self.power = 0
                     self.destroy()
                 }
             }
@@ -180,72 +171,80 @@
          */
         signalManager () {
             let self = this
-            return {
-                receive: function(msg){
-                    let order = self.adapterManager().decoding(msg)
-                    if(self.id == order.id && self.currState != order.cmd){
-                        self.stateManager().changesState(order.cmd)
-                    }
+
+            /**
+             * @description 接受信号装置
+             * @param {any} code 
+             */
+            const receive = function(code){
+                let msg = self.adapter.decoding(code)
+                if(self.id == msg.id && self.currState != msg.state){
+                    self.stateManager().changesState(msg.state)
                 }
+            }
+
+            /**
+             * @description 信号发射器
+             */
+            const ejector = function () {
+                let timer = setInterval(function(){
+                    if(self.currState === 'destroy'){
+                        clearInterval(timer)
+                    }
+                    
+                    let msg = self.adapter.encoded({id: self.id, state: self.currState, power: self.power})
+                    BUS.transmit(msg, receiver)
+                }, 300)
+            }
+            
+            return {
+                receive: receive,
+                ejector: ejector
             }
         }
 
         /**
-         * @description 指令系统
+         * @description 自爆装置
          */
-        adapterManager () {
-            let self = this
-            /**
-             * @description 解码
-             * @param {String} msg 
-             * @returns 
-             */
-            function decoding(msg){
-                let id = parseInt(msg.substring(0, 4), 2),
-                    cmd
+        destroy () {
+            BUS.remove(this.id)
+        }
+    }
     
-                switch(msg.substring(4, 8)){
-                    case '0001':
-                        cmd = 'fly'
-                        break
-                    case '0010':
-                        cmd = 'stop'
-                        break
-                    case '0011':
-                        cmd = 'destroy'
-                        break
-                }
-                
-                return {
-                    id: id,
-                    cmd: cmd
-                }
+    
+    /**
+     * @description Adapter适配器
+     */
+    class Adapter {
+        constructor(){
+        }
+
+        /**
+         * @description 加密
+         * @memberOf Adapter
+         */
+        encoded(msg){
+            let id = msg.id.toString(2),
+                state,
+                power
+            for(let i = 4, l = id.length; i > l; i--){
+                id = '0' + id
             }
-            
-            /**
-             * @description 加密
-             */
-            function encoded(){
-                let id = self.id.toString(2),
-                    state = self.currState,
-                    power = self.power.toString(2)
 
-                for(let i = 4, l = id.length; i > l; i--){
-                    id = '0' + id
-                }
+            switch(msg.state){
+                case 'fly':
+                    state = '0001'
+                    break
+                case 'stop':
+                    state = '0010'
+                    break
+                case 'destroy':
+                    state = '1100'
+                    break
+            }
 
-                switch(state){
-                    case 'fly':
-                        state = '0001'
-                        break
-                    case 'stop':
-                        state = '0010'
-                        break
-                    case 'destroy':
-                        state = '1100'
-                        break
-                }
-
+            if(msg.power){
+                power = parseInt(msg.power).toString(2)
                 for(let i = 8, l = power.length; i > l; i--){
                     power = '0' + power
                 }
@@ -253,65 +252,72 @@
                 return id + state + power
             }
 
-            return {
-                decoding: decoding,
-                encoded: encoded
-            }
+            return id + state
         }
 
         /**
-         * @description 信号发射器
+         * @description 解密
+         * @memberOf Adapter
          */
-        ejector () {
-            let timer = setInterval(function(){
+        decoding(code){
+            let id = parseInt(code.substring(0, 4), 2),
+                state = code.substring(4, 8),
+                power = parseInt(code.substring(8, 16), 2)
 
-            }, 500)
+            switch(state){
+                case '0001':
+                    state = 'fly'
+                    break
+                case '0010':
+                    state = 'stop'
+                    break
+                case '1100':
+                    state = 'destroy'
+                    break
+            }
+            
+            return {
+                id: id,
+                state: state,
+                power: power
+            }
         }
     }
 
 
     /**
-     * @description mediator广播介质
+     * @description 行星上的发射器（指挥官）
      */
-    const mediator = {
-        spaceships: [],
+    const emitter = (function(){
+        const adapter = new Adapter()
+
         /**
-         * @description 订阅消息
-         * @param {String} key - 缓存列表
-         * @callback fn 订阅函数
+         * @description 传播消息
+         * @param {*} msg 
+         * @param {*} to 
          */
-        listen: function(ship){
-            this.spaceships.push(ship)
-        },
+        const send = (msg) => {
+            let code = adapter.encoded(msg)
+            BUS.transmit(code)
+        }
 
-        trigger: function(msg){
-            let order = adapter.encoded(msg)
-            let timer = setInterval(function() {
-                let success = Math.random() > FAILURE_RATE ? true : false
-                if(success){
-                    clearTimeout(timer)
-                    for(let i = 0; i < this.spaceships.length; i++){
-                        this.spaceships[i].signalManager().receive(order)
-                    }
-                }else{
-                    console.log('请求失败')
-                }
-            }.bind(this), 300)
-        },
-
-        create: function(conf){
-            let num = [],
+        /**
+         * @description 直接通知造船厂造飞船，无需通过BUS介质
+         */
+        const create = (conf) => {
+            let spaceships = BUS.getSpaceships(),
+                num = [],
                 id = 0,
                 spd,
                 charge,
                 discharge
 
-            if(this.spaceships.length >= 4){
+            if(spaceships.length >= 4){
                 console.log('飞船数量最多为4')
                 return
             }
-            for(let i = 0; i < this.spaceships.length; i++){
-                num.push(this.spaceships[i].id)
+            for(let i = 0; i < spaceships.length; i++){
+                num.push(spaceships[i].id)
             }
             for(let i = 0; i < 4; i++){
                 if(num.indexOf(i) === -1){
@@ -346,95 +352,199 @@
                     charge = CHARGE_RATE_FAST
                     break
             }
-            
+
             new Spaceship(id, spd, charge, discharge)
         }
-    }
+
+        /**
+         * @description 指令按钮绑定
+         */
+        (function buttonHandle(){
+            let orderBox = document.getElementById('orderBox'),
+                createBtn = document.getElementById('createBtn'),
+                shipId = document.getElementById('shipId'),
+
+
+                dynamicBtn = document.getElementsByName('dynamic'),
+                powerBtn = document.getElementsByName('power'),
+                dynamic = '',
+                power = ''
+
+            orderBox.addEventListener('click', function(e){
+                if(e.target.nodeName === 'BUTTON'){
+                    switch(e.target.value){
+                        case 'fly':
+                            send({'id': shipId.selectedIndex, 'state': 'fly'})
+                            break
+                        case 'stop':
+                            send({'id': shipId.selectedIndex, 'state': 'stop'})
+                            break
+                        case 'destroy':
+                            send({'id': shipId.selectedIndex, 'state': 'destroy'})
+                            break
+
+                    }
+                }
+            })
+
+            createBtn.addEventListener('click', function(){
+                for(let i = 0; i < 3; i++){
+                    if(dynamicBtn[i].checked){
+                        dynamic = dynamicBtn[i].value
+                    }
+                    if(powerBtn[i].checked){
+                        power = powerBtn[i].value
+                    }
+                }
+                emitter.create({'dynamic': dynamic, 'power': power})
+            })
+        })()
+
+        return {
+            create: create
+        }
+    })()
+    
+    
+    /**
+     * @description 行星上的接收器
+     */
+    const receiver = (function(){
+        const receive = function(code){
+            DC.saveState(code)
+        }
+
+        return {
+            receive: receive
+        }
+    })()
 
 
     /**
-     * @description 加密/解密指令的Adapter系统
+     * @description 新一代传播介质BUS
      */
-    const adapter = (function(){
+    const BUS = (function(){
+        let spaceships = []
+
+        const register = function(obj){
+            if(obj instanceof Spaceship){
+                spaceships.push(obj)
+            }
+        }
+
+        const getSpaceships = function(){
+            return spaceships
+        }
+
+        const transmit = function(code, to){
+            let self = this,
+                adapter = new Adapter(),
+                spaceships = BUS.getSpaceships(),
+                timer = null
+            timer = setInterval(function(){
+                let success = Math.random() > FAILURE_RATE ? true : false
+                if(success){
+                    clearInterval(timer)
+                    if(to){
+                        to.receive(code)
+                    }else{
+                        for(let i = 0; i < spaceships.length; i++){
+                            spaceships[i].signalManager().receive(code)
+                        }
+                    }
+                }
+            }, 300)
+        }
+
+        const remove = function(id){
+            let num = [],
+                index
+            for(let i = 0; i < spaceships.length; i++){
+                num.push(spaceships[i].id)
+            }
+            index = num.indexOf(id)
+            if(index === -1){
+                return
+            }
+            delete spaceships[index]
+            let ship = spaceships.splice(index, 1)
+        }
+
+        return {
+            register: register,
+            getSpaceships: getSpaceships,
+            transmit: transmit,
+            remove: remove
+        }
+    })()
+
+
+    /**
+     * @description 数据处理中心
+     */
+    const DC = (function(){
+        const showState = document.getElementById('showState'),
+            stateList = [],
+            adapter = new Adapter()
+
         /**
-         * @description 加密
+         * @description 保存飞船数据
          * @param {Object} msg 
          */
-        const encoded = (msg) => {
-            let id = msg.id.toString(2),
-                cmd
-            for(let i = 4, l = id.length; i > l; i--){
-                id = '0' + id
+        const saveState = function(code){
+            let num = [],
+                msg = adapter.decoding(code),
+                l = stateList.length
+
+            for(let i = 0; i < l; i++){
+                num.push(stateList[i].id)
+            }
+            let index = num.indexOf(msg.id)
+
+            if(msg.state === 'destroy'){
+                stateList.splice(index, 1)
+                console.log(stateList)
+            }else{
+
+                if(l < 4 && index === -1){
+                    stateList.push(msg)
+                }else{
+                    stateList[index].state = msg.state
+                    stateList[index].power = msg.power
+                }
             }
 
-            switch(msg.cmd){
-                case 'fly':
-                    cmd = '0001'
-                    break
-                case 'stop':
-                    cmd = '0010'
-                    break
-                case 'destroy':
-                    cmd = '0011'
-                    break
+            drawState()
+        }
+
+        const drawState = function(){
+            showState.innerHTML = ''
+
+            for(let i = 0, l = stateList.length; i < l; i++){
+                let box = document.createElement('div')
+                box.className = 'stateBox'
+
+                let num = document.createElement('p'),
+                    state = document.createElement('p')
+                    
+                num.textContent = `${stateList[i].id + 1}号飞船`
+                state.innerHTML = `状态：<span>${stateList[i].state}</span> 电量：<span>${stateList[i].power}%</span>`
+
+                box.appendChild(num)
+                box.appendChild(state)
+                showState.appendChild(box)
             }
-
-            return id + cmd
-        }
-        
-        /**
-         * @description 解密
-         */
-        const decoding = (msg) => {
-            let id = parseInt(msg.substring(0, 4), 2),
-                state = msg.substring(4, 8),
-                power = parseInt(msg.substring(8, 16), 2)
-
-            switch(state){
-                case '0001':
-                    state = 'fly'
-                    break
-                case '0010':
-                    state = 'stop'
-                    break
-                case '1100':
-                    state = 'destroy'
-                    break
-            }
-            
-            return {
-                id: id,
-                state: state,
-                power: power
-            }
-        }
-        
-        return {
-            encoded: encoded,
-            decoding: decoding
-        }
-    })()
-
-    /**
-     * @description 指挥官
-     */
-    const commander = (function () {
-        function create(conf){
-            mediator.create(conf)
-        }
-
-        function send(msg){
-            mediator.trigger(msg)
         }
 
         return {
-            create: create,
-            send: send
+            saveState: saveState
         }
     })()
 
+
+
     /**
-     * @description 动画工具
+     * @description 动画模块
      */
     const AnimUtil = (function(){
         const canvas = document.getElementById('screen')
@@ -559,7 +669,7 @@
          */
         var animLoop = function() {
             requestAnimationFrame(animLoop);
-            onDraw(mediator.spaceships);
+            onDraw(BUS.getSpaceships());
         };
 
 
@@ -577,48 +687,8 @@
         };
     })()
 
-    /**
-     * @description 按钮绑定
-     */
-    const buttonHandler = (function(){
-        let createBtn = document.getElementById('createBtn'),
-            startBtn = document.getElementById('startBtn'),
-            stopBtn = document.getElementById('stopBtn'),
-            destroyBtn = document.getElementById('destroyBtn'),
-            shipId = document.getElementById('shipId'),
-
-            dynamicBtn = document.getElementsByName('dynamic'),
-            dynamic = '',
-            powerBtn = document.getElementsByName('power'),
-            power = ''
-
-        createBtn.addEventListener('click', function(){
-            for(let i = 0; i < 3; i++){
-                if(dynamicBtn[i].checked){
-                    dynamic = dynamicBtn[i].value
-                }
-                if(powerBtn[i].checked){
-                    power = powerBtn[i].value
-                }
-            }
-            commander.create({'dynamic': dynamic, 'power': power})
-        })
-
-        startBtn.addEventListener('click', function(){
-            commander.send.call(this, {'id': shipId.selectedIndex, 'cmd': 'fly'})
-        })
-
-        stopBtn.addEventListener('click', function(){
-            commander.send.call(this, {'id': shipId.selectedIndex, 'cmd': 'stop'})
-        })
-
-        destroyBtn.addEventListener('click', function(){
-            commander.send.call(this, {'id': shipId.selectedIndex, 'cmd': 'destroy'})
-        })
-    })()
 
     window.onload = function(){
         AnimUtil.animLoop()
     }
-
 })()

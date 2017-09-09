@@ -12,6 +12,7 @@
     <canvas id="canvasBg" style="height: 500px; margin-left: 50px;"></canvas>
     <canvas id="screen" style="height: 500px; margin-left: 50px;"></canvas>
 
+    <div id="showState"></div>
     
     <div id="order">
         <div>
@@ -23,12 +24,12 @@
             <p>
                 能源系统选择：<input type="radio" name="power" value="slow" checked> 劲量型（补充能源速度2%/s）
                 <input type="radio" name="power" value="medium"> 光能型（补充能源速度3%/s）
-                <input type="radio" name="power" value="fast"> 永久性（补充能源速度4%/s）
+                <input type="radio" name="power" value="fast"> 永久型（补充能源速度4%/s）
             </p>
-            <button id="createBtn">新的飞船起飞</button>
+            <button id="createBtn" value="create">新的飞船起飞</button>
         </div>
         
-        <div>
+        <div id="orderBox">
             <select name="" id="shipId">
                 <option value="0">1号飞船</option>
                 <option value="1">2号飞船</option>
@@ -36,9 +37,9 @@
                 <option value="3">4号飞船</option>
             </select>
 
-            <button id="startBtn">开始飞行</button>
-            <button id="stopBtn">停止飞行</button>
-            <button id="destroyBtn">销毁</button>
+            <button id="startBtn" value="fly">开始飞行</button>
+            <button id="stopBtn" value="stop">停止飞行</button>
+            <button id="destroyBtn" value="destroy">销毁</button>
         </div>
     </div>
 

@@ -46,16 +46,20 @@ body {
     border-radius: 10px;
 }
 
-#console {
+#showState {
     float: right;
-    width: 300px;
+    width: 350px;
     height: 100%;
+    color: white;
+    font-size: 16px;
+    line-height: 30px;
     background: black;
 }
 
-#console p {
-    padding-left: 20px;
-    line-height: 26px;
-    color: white;
-    font-size: 14px;
+#showState div{
+    margin: 20px 0;
+}
+
+#showState span {
+    margin-right: 20px;
 }
