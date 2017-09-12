@@ -1,0 +1,8 @@
+.usernameErr {
+    text-indent: 3em;
+    color: red;
+}
+.usernameTrue {
+    text-indent: 3em;
+    color: green;
+}
