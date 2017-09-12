@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>行星与飞船2</title>
+    <link rel="stylesheet" href="style/reset.css">
+    <link rel="stylesheet" href="style/index.css">
+</head>
+<body>
+    <div id="console">
+        <p>跟小春春看电影</p>
+        <p>我爱春晓大宝宝</p>
+    </div>
+
+    <canvas id="canvasBg" style="height: 500px; margin-left: 50px;"></canvas>
+    <canvas id="screen" style="height: 500px; margin-left: 50px;"></canvas>
+
+    
+    <div id="order">
+        <div>
+            <p>
+                动力系统选择：<input type="radio" name="dynamic" value="slow" checked> 前进号（速率30px/s，能耗5%/s）
+                <input type="radio" name="dynamic" value="medium"> 奔腾号（速率50px/s，能耗7%/s）
+                <input type="radio" name="dynamic" value="fast"> 超越号（速率80px/s，能耗9%/s）
+            </p>
+            <p>
+                能源系统选择：<input type="radio" name="power" value="slow" checked> 劲量型（补充能源速度2%/s）
+                <input type="radio" name="power" value="medium"> 光能型（补充能源速度3%/s）
+                <input type="radio" name="power" value="fast"> 永久性（补充能源速度4%/s）
+            </p>
+            <button id="createBtn">新的飞船起飞</button>
+        </div>
+        
+        <div>
+            <select name="" id="shipId">
+                <option value="0">1号飞船</option>
+                <option value="1">2号飞船</option>
+                <option value="2">3号飞船</option>
+                <option value="3">4号飞船</option>
+            </select>
+
+            <button id="startBtn">开始飞行</button>
+            <button id="stopBtn">停止飞行</button>
+            <button id="destroyBtn">销毁</button>
+        </div>
+    </div>
+
+    
+    <script src="js/index.js"></script>
+</body>
+</html>

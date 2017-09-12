@@ -1,0 +1,48 @@
+html, body{
+	height:100%;
+}
+
+div{
+	width:150px;
+	margin-bottom:20px;
+}
+
+.wrap{
+	height:100%;
+	width:100%;
+	display:flex;
+	box-sizing:border-box;
+	padding:20px;
+	flex-wrap:wrap;
+	justify-content:space-between;
+	align-content:flex-start;
+	align-items:center;
+}
+
+
+.box1, .box2, .box3{
+	border:1px solid #f00;
+}
+.box1{
+	height:120px;
+}
+.box2{
+	height:100px;
+}
+.box3{
+	height:40px;
+}
+
+.box4{
+	height:200px;
+	border:1px solid #0f0;
+}
+
+@media (max-width: 640px) {
+  .wrap{
+  	align-items:flex-start;
+  }
+  .box4{
+  	order:-1;
+  }
+}

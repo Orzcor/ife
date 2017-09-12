@@ -1,0 +1,43 @@
+body{background:#dedede;}
+
+/* 头部布局 g-hd */
+.g-hd{padding:0 10px;height:50px;background:#333;}
+.g-hd h1 {float:left;}
+.g-hd h1 img{height:50px;}
+
+/* 头部导航模块 m-nav */
+.m-nav{}
+.m-nav li{float:left;padding:0 10px;line-height:50px;}
+.m-nav li:hover{background:#777;}
+.m-nav a{color:#fff;}
+
+
+/* 文章模块 m-art */
+.m-art, .m-sd{margin:20px 20px;padding:20px 20px;background:#fff;line-height:16px;box-shadow:1px 1px 2px 1px #848484;}
+.m-art{font-size:16px;}
+.m-art h2{padding:10px 0;font-size:24px;font-weight:bold;}
+.m-art h3{padding:10px 0;font-size:16px;color:#777;font-weight:bold;}
+.m-art .auther, .m-art .time{color:#777;font-size:12px;line-height:30px;}
+.m-art p{text-indent:2em;line-height:24px;}
+.m-art figure{margin:10px 0;width:150px;height:150px;border:1px solid #e8ecef;text-align:center;}
+.m-art figcaption{line-height:30px;}
+.m-art figure img{max-width:110px;max-height:110px;}
+.m-art .rank li{list-style:decimal inside;line-height:24px;}
+	/* 表格 */
+.m-art .tab{width:100%;border:1px solid #e6e6e6;border-collapse: collapse;}
+.m-art .tab td, .m-art .tab th{padding:5px;border:1px solid #e6e6e6;}
+.m-art .tab th{background:#333;color:#fff;font-weight:bold;}
+.m-art .tab .bottom{background:#ccc;}
+
+/* 侧栏模块 m-sd */
+.m-sd{}
+.m-sd h2{padding:10px 10px;font-size:16px;font-weight:bold;border-left:3px solid #DCDCDC;}
+.m-sd div{margin:10px 0;}
+.m-sd label{display:block;float:left;width:35%;text-align:right;}
+.m-sd .tips{margin-left:35%;font-size:12px;color:#aaa;}
+.m-sd .msg{width:45%;height:100px;}
+.m-sd input[type="checkbox"], .m-sd input[type="radio"]{vertical-align:middle;}
+.m-sd .submit{margin:0 auto;width:100%;font-size:24px;color:#fff;background:#128fdc;border:none;border-radius:10px;}
+
+
+/* 元件 u-. */

@@ -1,0 +1,52 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>1-21</title>
+    
+        <style>
+            #tagBox, #hobbyBox{
+                display:flex;
+                margin-top:20px;
+                width:800px;
+                align-items:flex-end;
+            }
+
+            #tagBox span, #hobbyBox span {
+                display: inline-block;
+                padding:5px;
+                font-size: 14px;
+                text-align: center;
+                margin: 2px 0;
+                margin-right: 7px;
+                background-color: blue;
+                color: #FFFFFF;
+            }
+
+            #hobbyBox span{
+                background: orange;
+            }
+
+            #tagBox .z-sch{
+                background:red;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div>
+            Tag: <input type="text" id="tagInput" />
+        </div>
+        <div id="tagBox"></div>
+        <br />
+        
+        <textarea id="hobbyInput" type="text" cols="40" rows="5">i love jason</textarea>
+        <br />
+        <input type="button" value="确认兴趣爱好" id="hobbyBtn">
+        <br />
+        
+        <div id="hobbyBox"></div>
+
+        <script src="1-21.js"></script>
+    </body>
+</html>
