@@ -1,0 +1,44 @@
+#register .false {
+    color: red;
+}
+#register .true {
+    color: green;
+}
+#register .default {
+    color: #787878;
+}
+
+#register {
+    text-align: center;
+}
+
+#register p {
+    padding: 10px 0;
+}
+
+#register input {
+    position: absolute;
+    left: 40%;
+    width: 200px;
+}
+
+#register strong {
+    position: absolute;
+    right: 61%;
+}
+
+#register span {
+    position: absolute;
+    left: 40%;
+    margin: 4px 0;
+    font-size: 12px;
+    color: #787878;
+}
+
+#submitBtn {
+    width: 200px;
+    color: white;
+    background: #6060BB;
+    border: 0;
+    border-radius: 10px;
+}
