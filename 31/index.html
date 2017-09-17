@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>表单（三）联动</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <mian class="g-mn">
+        <section class="m-tt">
+            <div>
+                <input id="inSchool" type="radio" name="school" checked>
+                <stropng>在校生</stropng>
+            </div>
+            <div>
+                <input id="outSchool" type="radio" name="school">
+                <stropng>非在校生</stropng>
+            </div>
+        </section>
+        <section class="m-ct">
+            <div id="j-school" class="school">
+                <strong>学校：</strong>
+                <select name="" id="">
+                    <option value="">北京</option>
+                </select>
+                <select name="" id="">
+                    <option value="">清华大学</option>
+                </select>
+            </div>
+            <div id="j-job" class="job" style="display: none;">
+                <strong>就业单位</strong>：
+                <input type="text">
+            </div>
+        </section>
+    </mian>
+
+    <script src="index.js"></script>
+</body>
+</html>
