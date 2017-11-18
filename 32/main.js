@@ -6,7 +6,8 @@ const strategies = {
             return errorMsg
         }
     },
-    extent: function(value, minLength, maxLength, errorMsg){if(value.length < minLength || value.length > maxLength){
+    extent: function(value, minLength, maxLength, errorMsg){
+        if(value.length < minLength || value.length > maxLength){
             return errorMsg
         }
     },
@@ -51,7 +52,8 @@ let formData = [{
     elem: 'input',
     type: 'password',
     name: 'pwdAffirm',
-    checkout: ['isNonEmpty:密码确认不能为空'],
+    same: 'password',
+    checkout: ['isNonEmpty:密码确认不能为空', 'isSame:两次密码不一致'],
     success: '两次密码一致',
 }, {
     value: '邮箱',
@@ -117,32 +119,56 @@ class FormFactory {
         document.body.appendChild(form)
     }
 
+    binding() {
+        let elems = Object.keys(this.elems)
+        for(let i = 0, l = elems.length; i < l; i++){
+            let elem = elems[i]
+            this.elems[elem].addEventListener('blur', (function(validator){
+                return function(){
+                    let error = validator.start(this.name)
+                    let tip = this.parentElement.querySelector('span')
+                    if(error){
+                        tip.textContent = `${error}`
+                    }else{
+                        tip.textContent = ''
+                    }
+                }
+            })(this.validator))
+        }
+    }
+
     init() {
         this.produce(this.data)
         this.validator = new Validator(this.elems)
         this.validator.add(this.checkout)
+        this.binding()
     }
 }
 
 class Validator{
     constructor(elems) {
-        this.cache = []
+        this.cache = {}
         this.elems = elems
     }
 
     add(checkout) {
         let self = this,
             names = Object.keys(checkout)
+
         names.forEach(function(item){
             let rules = checkout[item],
                 elem = this.elems[item]
+
+            if(!self.cache[item]){
+                self.cache[item] = []
+            }
 
             for(let i = 0, l = rules.length; i < l; i++){
                 (function(rules, item, elem){
                     let strategyAry = rules[i].split(':')
                     let strategy = strategyAry.shift()
 
-                    self.cache.push(function(){
+                    self.cache[item].push(function(){
                         let para = strategyAry.concat()
                         para.unshift(elem.value)
                         return strategies[strategy].apply(null, para)
@@ -154,13 +180,24 @@ class Validator{
 
     }
 
-    start() {
-        for(let i = 0, fn; fn = this.cache[i++];){
-            let error = fn()
-            if(error){
-                return error
+    start(key) {
+        let rules = this.cache[key]
+        for(let i = 0, fn; fn = rules[i++];){
+            return fn()
+        }
+    }
+
+    all() {
+        let keys = Object.keys(this.cache)
+        for(let i = 0, l = keys.length; i < l; i++){
+            let key = keys[i]
+            let rules = this.cache[key]
+            for(let j = 0, fn; fn = rules[j++];){
+                let error = fn()
+                if(error) return error
             }
         }
+        
     }
 }
 
@@ -169,7 +206,7 @@ let form1 = new FormFactory(formData)
 
 
 form1.form.addEventListener('submit', function(event){
-    let error = form1.validator.start()
+    let error = form1.validator.all()
     if(error){
         log(error)
         event.preventDefault()
